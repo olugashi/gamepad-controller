@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import useJoystick from './hooks/useJoystick';
 import GamepadDisplay from './components/GamepadDisplay';
+import XboxController from './components/XboxController';
 import { registerDrivingHandler, registerCameraHandler, registerGamepadEvents } from './services/JoystickService';
 
 const App: React.FC = () => {
@@ -74,8 +75,7 @@ const App: React.FC = () => {
   return (
     <div>
       <h1>Gamepad Controller App</h1>
-      <button onClick={simulateGamepadConnection}>Simulate Gamepad Connection</button>
-      <button onClick={simulateGamepadDisconnection}>Simulate Gamepad Disconnection</button>
+      <XboxController onConnect={simulateGamepadConnection} onDisconnect={simulateGamepadDisconnection} />
       <GamepadDisplay />
     </div>
   );
