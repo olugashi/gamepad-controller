@@ -1,20 +1,39 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import eventBus from '../eventBus/eventBus';
+import { DrivingData } from '../models/DrivingModel';
+import { registerDrivingHandler } from '../services/JoystickService';
 
-interface JoystickData {
-  axes: number[];
-}
+const DrivingComponent: React.FC = () => {
+  const [drivingData, setDrivingData] = useState<DrivingData>({ steer: 0, gas: 0, brake: 0 });
 
-const DrivingComponent: React.FC<{ joystickData: JoystickData }> = ({ joystickData }) => {
-  const steer = joystickData.axes[0] || 0;
-  const gas = joystickData.axes[1] || 0;
-  const brake = joystickData.axes[2] || 0;
+  useEffect(() => {
+    const handleDrivingData = (data: DrivingData) => {
+      setDrivingData(data);
+      sendDataToServer(data);
+    };
+
+    eventBus.on('drivingData', handleDrivingData);
+
+    return () => {
+      eventBus.off('drivingData', handleDrivingData);
+    };
+  }, []);
+
+  useEffect(() => {
+    const joystickData = { axes: [], buttons: [] }; // Replace with actual joystick data
+    registerDrivingHandler(joystickData);
+  }, []);
+
+  const sendDataToServer = (data: DrivingData) => {
+    console.log('Driving data:', data);
+  };
 
   return (
     <div>
       <h2>Driving Controls</h2>
-      <div>Steer: {steer.toFixed(2)}</div>
-      <div>Gas: {gas.toFixed(2)}</div>
-      <div>Brake: {brake.toFixed(2)}</div>
+      <div>Steer: {drivingData.steer.toFixed(2)}</div>
+      <div>Gas: {drivingData.gas.toFixed(2)}</div>
+      <div>Brake: {drivingData.brake.toFixed(2)}</div>
     </div>
   );
 };

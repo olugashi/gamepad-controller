@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import eventBus from '../eventBus/eventBus';
 
 interface JoystickData {
   axes: number[];
@@ -11,7 +10,6 @@ const useJoystick = () => {
 
   useEffect(() => {
     const handleGamepadConnected = () => {
-      eventBus.emit('gamepadconnected');
       const updateJoystickData = () => {
         const gamepads = navigator.getGamepads();
         const gamepad = gamepads[0];
@@ -24,7 +22,6 @@ const useJoystick = () => {
             axes: [...data.axes],
             buttons: [...data.buttons]
           });
-          eventBus.emit('joystickData', data);
         }
         requestAnimationFrame(updateJoystickData);
       };
@@ -33,8 +30,6 @@ const useJoystick = () => {
 
     const handleGamepadDisconnected = () => {
       setJoystickData({ axes: [], buttons: [] });
-      eventBus.emit('joystickData', { axes: [], buttons: [] });
-      eventBus.emit('gamepaddisconnected');
     };
 
     window.addEventListener('gamepadconnected', handleGamepadConnected);

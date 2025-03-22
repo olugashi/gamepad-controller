@@ -1,9 +1,18 @@
 import React, { useEffect, useRef } from 'react';
-import useJoystick from './hooks/useGamepad';
+import useJoystick from './hooks/useJoystick';
 import GamepadDisplay from './components/GamepadDisplay';
+import { registerGamepadEvents } from './services/JoystickService';
 
 const App: React.FC = () => {
-  useJoystick(); // Initialize the joystick hook to start listening for gamepad events
+  const joystickData = useJoystick(); // Initialize the joystick hook to start listening for gamepad events
+
+  useEffect(() => {
+    const unregisterGamepadEvents = registerGamepadEvents();
+
+    return () => {
+      unregisterGamepadEvents();
+    };
+  }, []);
 
   const intervalRef = useRef<number | null>(null);
 
