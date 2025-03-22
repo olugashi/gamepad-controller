@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import eventBus from '../eventBus/eventBus';
 import { DrivingData } from '../models/DrivingModel';
-import { registerDrivingHandler } from '../services/JoystickService';
 
 const DrivingComponent: React.FC = () => {
   const [drivingData, setDrivingData] = useState<DrivingData>({ steer: 0, gas: 0, brake: 0 });
@@ -17,11 +16,6 @@ const DrivingComponent: React.FC = () => {
     return () => {
       eventBus.off('drivingData', handleDrivingData);
     };
-  }, []);
-
-  useEffect(() => {
-    const joystickData = { axes: [], buttons: [] }; // Replace with actual joystick data
-    registerDrivingHandler(joystickData);
   }, []);
 
   const sendDataToServer = (data: DrivingData) => {

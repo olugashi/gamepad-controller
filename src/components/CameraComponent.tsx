@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import eventBus from '../eventBus/eventBus';
 import { CameraData } from '../models/CameraModel';
-import { registerCameraHandler } from '../services/JoystickService';
 
 const CameraComponent: React.FC = () => {
   const [cameraData, setCameraData] = useState<CameraData>({ cameraX: 0, cameraY: 0, cameraZ: 0 });
@@ -17,11 +16,6 @@ const CameraComponent: React.FC = () => {
     return () => {
       eventBus.off('cameraData', handleCameraData);
     };
-  }, []);
-
-  useEffect(() => {
-    const joystickData = { axes: [], buttons: [] }; // Replace with actual joystick data
-    registerCameraHandler(joystickData);
   }, []);
 
   const sendDataToServer = (data: CameraData) => {

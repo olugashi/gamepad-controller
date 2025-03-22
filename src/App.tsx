@@ -1,10 +1,15 @@
 import React, { useEffect, useRef } from 'react';
 import useJoystick from './hooks/useJoystick';
 import GamepadDisplay from './components/GamepadDisplay';
-import { registerGamepadEvents } from './services/JoystickService';
+import { registerDrivingHandler, registerCameraHandler, registerGamepadEvents } from './services/JoystickService';
 
 const App: React.FC = () => {
   const joystickData = useJoystick(); // Initialize the joystick hook to start listening for gamepad events
+
+  useEffect(() => {
+    registerDrivingHandler(joystickData);
+    registerCameraHandler(joystickData);
+  }, [joystickData]);
 
   useEffect(() => {
     const unregisterGamepadEvents = registerGamepadEvents();
